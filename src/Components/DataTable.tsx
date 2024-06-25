@@ -1,33 +1,35 @@
 import React, { useMemo, useRef, useState} from 'react';
 import {
+    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {useSelector} from "react-redux";
+// @ts-ignore
+import {CsvData, CsvRow} from "../App";
+import {RootState} from "../StateMangement/store";
 
 const DataTable = () => {
-    const data = useSelector(state => state.output.data);
-    const [sorting, setSorting] = useState([]);
-    const [columnFilters, setColumnFilters] = useState([]);
+    const data: CsvData | null = useSelector((state: RootState) => state.output.data);
 
-    const columns = useMemo(() => {
-        if (data.length === 0) return [];
-        console.log(Object.keys(data[0]))
-        return Object.keys(data[0]).map((key) => ({
-            header: key.charAt(0).toUpperCase() + key.slice(1),
-            accessorKey:  key,
-            id: isNaN(key) ? key : parseInt(key),
-        }));
-    }, [data]);
+    const columns = useMemo<ColumnDef<CsvRow>[]>(
+        () => {
+            if(!data) return [];
+            if (data.length === 0) return [];
+            return Object.keys(data[0]).map((key) => ({
+                header: key.charAt(0).toUpperCase() + key.slice(1),
+                accessorKey: key,
+                id: key,
+            }));
+        },
+        [data]
+    );
 
-    const tableInstance = useReactTable({
-        data,
+    const tableInstance = useReactTable<CsvRow>({
+        data: data ?? [],
         columns,
-        state: { sorting, columnFilters },
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
     });
 

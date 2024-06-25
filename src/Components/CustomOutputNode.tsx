@@ -1,11 +1,18 @@
-import {Handle} from "reactflow";
+import {Handle, NodeProps, Position} from "reactflow";
 import useParentData from "../utils/UseParentData";
 import {useDispatch} from "react-redux";
 import {deleteNode} from "../StateMangement/flowSlice";
+import React from "react";
+import {AppDispatch} from "../StateMangement/store";
+import {CustomData} from "../App";
 
-export default function CustomOutputNode ({id}){
+
+
+
+export default function CustomOutputNode ({id}: NodeProps<CustomData>){
     const parentData = useParentData(id);
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
+
 
     return (
         <div className="bg-gray-950 border border-gray-700 rounded-md p-2 w-64  hover:bg-gray-800">
@@ -24,8 +31,9 @@ export default function CustomOutputNode ({id}){
                 </button>
                 <div className="mt-4 text-sm">Allowed types: csv, json</div>
             </div>
-            <Handle type="target" position="left" className="w-2 h-2 bg-gray-500 rounded-full" />
+            <Handle type="target" position={Position.Left} className="w-2 h-2 bg-gray-500 rounded-full" />
         </div>
     );
+
 
 }

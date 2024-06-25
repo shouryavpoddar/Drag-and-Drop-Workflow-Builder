@@ -1,10 +1,14 @@
-import {useCallback} from "react";
-import {Handle} from "reactflow";
+import React from "react";
+import {Handle, NodeProps, Position} from "reactflow";
 import {deleteNode} from "../StateMangement/flowSlice";
 import {useDispatch} from "react-redux";
+import {AppDispatch} from "../StateMangement/store";
+import {CustomData} from "../App";
 
-export default function CustomInputNode ({id}){
-    const dispatch = useDispatch();
+
+export default function CustomInputNode ({id}: NodeProps<CustomData>){
+    const dispatch: AppDispatch = useDispatch();
+
 
     return (
         <div className="bg-gray-950 border border-gray-700 rounded-md p-2 w-64  hover:bg-gray-800">
@@ -21,8 +25,9 @@ export default function CustomInputNode ({id}){
                 </button>
                 <div className="mt-4 text-sm">Allowed types: csv, json</div>
             </div>
-            <Handle type="source" position="right" className="w-2 h-2 bg-gray-500 rounded-full" />
+            <Handle type="source" position={Position.Right} className="w-2 h-2 bg-gray-500 rounded-full" />
         </div>
     );
+
 
 }
