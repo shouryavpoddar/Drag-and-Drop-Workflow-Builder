@@ -1,105 +1,82 @@
-import React, { useMemo, useRef, useState} from 'react';
-import {
-    ColumnDef,
-    flexRender,
-    getCoreRowModel,
-    useReactTable
-} from '@tanstack/react-table';
+import React, { useMemo, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import {useSelector} from "react-redux";
-// @ts-ignore
-import {CsvData, CsvRow} from "../App";
-import {RootState} from "../StateMangement/store";
+import { useSelector } from 'react-redux';
+import { RootState } from '../StateMangement/store';
+import {CsvData} from "../App";
 
-const DataTable = () => {
+const DataTable: React.FC = () => {
     const data: CsvData | null = useSelector((state: RootState) => state.output.data);
 
-    const columns = useMemo<ColumnDef<CsvRow>[]>(
-        () => {
-            if(!data) return [];
-            if (data.length === 0) return [];
-            return Object.keys(data[0]).map((key) => ({
-                header: key.charAt(0).toUpperCase() + key.slice(1),
-                accessorKey: key,
-                id: key,
-            }));
-        },
-        [data]
-    );
+    const columns = useMemo(() => {
+        if (!data || data.length === 0) return [];
+        return Object.keys(data[0]).map(key => ({
+            header: key.charAt(0).toUpperCase() + key.slice(1),
+            accessorKey: key,
+            id: key,
+        }));
+    }, [data]);
 
-    const tableInstance = useReactTable<CsvRow>({
-        data: data ?? [],
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    });
-
-    const { rows } = tableInstance.getRowModel();
-
-    const parentRef = useRef(null);
+    const parentRef = useRef<HTMLDivElement>(null);
 
     const rowVirtualizer = useVirtualizer({
-        count: rows.length,
+        count: data?.length || 0,
         getScrollElement: () => parentRef.current,
-        estimateSize: () => 5,
-        overscan: 25,
+        estimateSize: () => 35, // Adjust the size based on your row height
+        overscan: 5,
+    });
+
+    const columnVirtualizer = useVirtualizer({
+        horizontal: true,
+        count: columns.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 150, // Adjust the size based on your column width
+        overscan: 5,
     });
 
     return (
-        <div className={'h-full'}>
-            <div ref={parentRef} className="h-full overflow-y-auto">
-                <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
-                    <table>
-                        <thead>
-                        {tableInstance.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <th
-                                        key={header.id}
-                                        colSpan={header.colSpan}
-                                        className="border px-4"
-                                    >
-                                        {header.isPlaceholder ? null : (
-                                            <div>
-                                                {flexRender(header.column.columnDef.header, header.getContext())}
-                                            </div>
-                                        )}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                        </thead>
-                        <tbody>
-                        {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
-                            const row = rows[virtualRow.index];
-                            return (
-                                <tr
-                                    key={row.id}
-                                    style={{ height: `${virtualRow.size}px`,
-                                        transform: `translateY(${ virtualRow.start - index * virtualRow.size }px)`,
-                                        textAlign: 'center',
-                                        borderBottom: '1px',
+        <div className="h-full">
+            <div
+                ref={parentRef}
+                className="List"
+                style={{
+                    height: `500px`,
+                    width: `100%`,
+                    overflow: 'auto',
+                }}
+            >
+                <div
+                    style={{
+                        height: `${rowVirtualizer.getTotalSize()}px`,
+                        width: `${columnVirtualizer.getTotalSize()}px`,
+                        position: 'relative',
+                    }}
+                >
+                    {rowVirtualizer.getVirtualItems().map((virtualRow, index) => (
+                        <React.Fragment key={virtualRow.key}>
+                            {columnVirtualizer.getVirtualItems().map(virtualColumn => (
+                                <div
+                                    key={virtualColumn.key}
+                                    className={` outline outline-1 border border-gray-500 text-center`}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: `${virtualColumn.size}px`,
+                                        height: `${virtualRow.size}px`,
+                                        transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
                                     }}
                                 >
-                                    {row.getVisibleCells().map((cell) => {
-                                        return (
-                                            <td
-                                                key={cell.id} >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext(),
-                                                )}
-                                            </td>
-                                        )
-                                    })}
-                                </tr>
-                            );
-                        })}
-                        </tbody>
-                    </table>
+                                    {virtualRow.index === 0
+                                        ? columns[virtualColumn.index].header
+                                        : data![virtualRow.index][columns[virtualColumn.index].accessorKey]}
+                                </div>
+                            ))}
+                        </React.Fragment>
+                    ))}
                 </div>
             </div>
         </div>
     );
-};
+}
 
 export default DataTable;

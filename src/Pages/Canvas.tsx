@@ -3,22 +3,30 @@ import ReactFlow, {Background, BackgroundVariant, Controls, Edge, MiniMap, Node,
 import 'reactflow/dist/style.css';
 import AddBlockModal from "../Components/AddBlockModal";
 import InputNode from "../Components/CustomInputNode";
-import {FilterNode, SliceNode, SortNode} from "../Components/CustomTransfromationNodes";
+import {
+    FilterNode,
+    MergeNode, MutateNode, PivotNode,
+    RemoveColumnsNode,
+    SliceNode,
+    SortNode
+} from "../Components/CustomTransfromationNodes";
 import {useDispatch, useSelector} from "react-redux";
 import {onConnect, onEdgesChange, onNodesChange} from "../StateMangement/flowSlice";
 import DataTable from "../Components/DataTable";
-import OutputNode from "../Components/CustomOutputNode";
 import {outputPanelClose, outputPanelOpen} from "../StateMangement/outputSlice";
 import {CSVLink} from "react-csv";
 import {AppDispatch, RootState} from "../StateMangement/store";
-import {CsvData} from "../App"; // Adjust the import based on your file structure
+import {CsvData} from "../App";
 
 const nodeTypes = {
     inputNode: InputNode,
     filterNode: FilterNode,
     sortNode: SortNode,
     sliceNode: SliceNode,
-    outputNode: OutputNode,
+    mergeNode: MergeNode,
+    removeColumnsNode: RemoveColumnsNode,
+    pivotNode: PivotNode,
+    mutateNode: MutateNode,
 };
 
 const Canvas: React.FC = () => {

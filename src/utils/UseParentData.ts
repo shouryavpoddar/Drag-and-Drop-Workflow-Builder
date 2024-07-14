@@ -11,16 +11,17 @@ interface FlowState {
 }
 
 
-const useParentData = (id: string) : CsvData | null => {
+const useParentData = (id: string) : CsvData[] | null[] => {
     const { nodes, edges } = useSelector((state: RootState) => state.flow as FlowState);
-    const [data, setData] = useState<any | null>(null);
+    const [data, setData] = useState<CsvData[] | null[]>([null]);
 
 
-    const identifyParent = (edges: Edge[], nodes: Node[], id: string): Node | null => {
+    const identifyParents = (edges: Edge[], nodes: Node[], id: string): Node[] | null => {
         const edge = edges.filter(edge => edge.target === id);
         if (edge.length > 0) {
-            const sourceId = edge[0].source;
-            return nodes.find(node => node.id === sourceId) || null;
+            // will be able to get both edges that run into the merge node
+            const sourceIds  = edge.map(e => e.source);
+            return nodes.filter(node => node.id === sourceIds[0] || node.id === sourceIds[1]);
         }
         console.log('No parent found');
         return null;
@@ -28,9 +29,16 @@ const useParentData = (id: string) : CsvData | null => {
 
 
     useEffect(() => {
-        const parent = identifyParent(edges, nodes, id);
+        const parent = identifyParents(edges, nodes, id);
         if (parent) {
-            setData(parent.data);
+            if(parent.length > 1){
+                setData([
+                    parent[0].data,
+                    parent[1].data
+                ])
+            } else{
+                setData([parent[0].data]);
+            }
         }
     }, [edges, nodes, id]);
 

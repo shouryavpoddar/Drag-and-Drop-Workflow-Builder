@@ -19,12 +19,11 @@ const flowSlice = createSlice({
     name: 'flow',
     initialState,
     reducers: {
-        addInputNode(state, action: PayloadAction<any>) {
+        addInputNode(state) {
             state.nodes = [
                 ...state.nodes,
                 {
                     id: `${Date.now()}`,
-                    data: action.payload,
                     position: { x: 100, y: 200 },
                     type: 'inputNode',
                 } as Node,
@@ -38,6 +37,17 @@ const flowSlice = createSlice({
                     data: undefined,
                     position: { x: 100, y: 200 },
                     type: 'filterNode',
+                } as Node,
+            ];
+        },
+        addMergeNode(state) {
+            state.nodes = [
+                ...state.nodes,
+                {
+                    id: `${Date.now()}`,
+                    data: undefined,
+                    position: { x: 100, y: 200 },
+                    type: 'mergeNode',
                 } as Node,
             ];
         },
@@ -63,14 +73,36 @@ const flowSlice = createSlice({
                 } as Node,
             ];
         },
-        addOutputNode(state) {
+        addPivotNode(state){
             state.nodes = [
                 ...state.nodes,
                 {
                     id: `${Date.now()}`,
                     data: undefined,
                     position: { x: 100, y: 200 },
-                    type: 'outputNode',
+                    type: 'pivotNode',
+                } as Node,
+            ];
+        },
+        addMutateNode(state){
+            state.nodes = [
+                ...state.nodes,
+                {
+                    id: `${Date.now()}`,
+                    data: undefined,
+                    position: { x: 100, y: 200 },
+                    type: 'mutateNode',
+                } as Node,
+            ];
+        },
+        addRemoveColumnsNode(state) {
+            state.nodes = [
+                ...state.nodes,
+                {
+                    id: `${Date.now()}`,
+                    data: undefined,
+                    position: { x: 100, y: 200 },
+                    type: 'removeColumnsNode',
                 } as Node,
             ];
         },
@@ -110,8 +142,11 @@ export const {
     onEdgesChange,
     onConnect,
     addSliceNode,
-    addOutputNode,
+    addMergeNode,
     deleteNode,
+    addRemoveColumnsNode,
+    addPivotNode,
+    addMutateNode,
 } = flowSlice.actions;
 
 

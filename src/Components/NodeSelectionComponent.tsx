@@ -12,8 +12,7 @@ interface NodeSelectionComponentProps {
     description: string;
     input?: string;
     output: string;
-    data?: string; // CSV file path
-    addNodeFunction?: () => Action | UnknownAction;
+    addNodeFunction: () => Action | UnknownAction;
 }
 
 const NodeSelectionComponent: React.FC<NodeSelectionComponentProps>
@@ -21,41 +20,12 @@ const NodeSelectionComponent: React.FC<NodeSelectionComponentProps>
        description,
        input,
        output,
-       data: csvFilePath,
        addNodeFunction,}) => {
     const dispatch: AppDispatch = useDispatch();
 
     const onClick = () => {
-        let data: any[] = [];
-        if (!csvFilePath) {
-            if (addNodeFunction) {
-                dispatch(addNodeFunction());
-            }
-            dispatch(modalClose());
-            return;
-        }
-        fetch(csvFilePath)
-            .then((response) => response.text())
-            .then((csvText) => {
-                Papa.parse(csvText, {
-                    header: true,
-                    dynamicTyping: true,
-                    complete: function (results: { data: any[]; }) {
-                        data = results.data;
-                    },
-                    error: function (error: { message: any; }) {
-                        console.error("Error:", error.message);
-                    },
-                });
-            })
-            .then(() => {
-                if (title === "File" || !addNodeFunction) {
-                    dispatch(addInputNode(data));
-                } else {
-                    dispatch(addNodeFunction());
-                }
-                dispatch(modalClose());
-            });
+        dispatch(addNodeFunction());
+        dispatch(modalClose())
     };
 
     return (
