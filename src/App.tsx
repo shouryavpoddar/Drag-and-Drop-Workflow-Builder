@@ -3,6 +3,7 @@ import Canvas from "./Pages/Canvas";
 import {Provider} from "react-redux";
 import {store} from "./StateMangement/store";
 import React from 'react';
+import Login from './Components/auth/login';
 
 
 export type CustomData = {
