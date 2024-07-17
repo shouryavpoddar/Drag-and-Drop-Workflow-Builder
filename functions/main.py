@@ -5,6 +5,8 @@
 from firebase_functions import firestore_fn, https_fn
 from firebase_admin import initialize_app, firestore
 import google.cloud.firestore
+import pandas as pd
+
 initialize_app()
 
 
@@ -28,3 +30,6 @@ def addmessage(req: https_fn.Request) -> https_fn.Response:
 
     # Send back a message that we've successfully written the message
     return https_fn.Response(f"Message with ID {doc_ref.id} added.")
+
+# def filter(dataset:str, command:str, value = None):
+
