@@ -1,7 +1,7 @@
 // nodesDataSlice.ts
-import { CsvData } from "../App";
+import { CsvData } from "../../App";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from './store'; // Adjust the import path according to your project structure
+import { RootState } from '../store'; // Adjust the import path according to your project structure
 
 interface NodesDataState {
     dataBase: { [key: string]: CsvData }; // Corrected type definition for dataBase

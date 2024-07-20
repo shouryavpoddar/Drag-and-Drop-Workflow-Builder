@@ -2,7 +2,7 @@ import React from 'react';
 import DataTable from "../../../Components/DataTable";
 import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
-import { outputPanelClose, outputPanelOpen } from "../../../StateMangement/outputSlice";
+import { outputPanelClose, outputPanelOpen } from "../../../StateMangement/Slices/outputSlice";
 import { AppDispatch, RootState } from "../../../StateMangement/store";
 import {CsvData} from "../../../App";
 import Table from "../../../Components/Table/Table"

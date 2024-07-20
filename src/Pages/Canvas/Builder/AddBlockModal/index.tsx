@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import Sidebar from "../../../../Components/Sidebar";
 import NodeSelectionComponent from "./NodeSelectionComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { modalClose, modalOpen } from "../../../../StateMangement/modalSlice";
+import { modalClose, modalOpen } from "../../../../StateMangement/Slices/modalSlice";
 import {AppDispatch, RootState} from "../../../../StateMangement/store";
 
 Modal.setAppElement("#root");

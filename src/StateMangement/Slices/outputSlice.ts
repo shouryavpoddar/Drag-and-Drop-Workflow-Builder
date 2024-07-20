@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {CsvData} from "../App";
+import {CsvData} from "../../App";
 import {setNodeData} from "./nodesDataSlice";
 
 

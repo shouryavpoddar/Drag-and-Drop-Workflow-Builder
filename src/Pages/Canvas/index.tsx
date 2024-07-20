@@ -2,10 +2,10 @@
 import React from 'react';
 import 'reactflow/dist/style.css';
 import Builder from './Builder';
-import { useResizable } from  '../../utils/useResizable';
+import { useResizable } from '../../utils/useResizable';
 import BottomLayout from './BottomLayout';
 
-const Canvas: React.FC = () => {
+const Index: React.FC = () => {
     const { handleMouseDown, height, availablelHeight } = useResizable();
 
     return (
@@ -22,4 +22,4 @@ const Canvas: React.FC = () => {
     );
 }
 
-export default Canvas;
+export default Index;

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../StateMangement/store'; // Adjust the import based on your project structure
 import { Edge, Node } from 'reactflow';
 import { CsvData } from '../App';
-import { selectNodeDataById } from '../StateMangement/nodesDataSlice'; // Adjust the import based on your project structure
+import { selectNodeDataById } from '../StateMangement/Slices/nodesDataSlice'; // Adjust the import based on your project structure
 
 interface FlowState {
     nodes: Node[];

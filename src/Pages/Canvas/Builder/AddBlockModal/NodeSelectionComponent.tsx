@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { modalClose } from "../../../../StateMangement/modalSlice";
+import { modalClose } from "../../../../StateMangement/Slices/modalSlice";
 import {AppDispatch} from "../../../../StateMangement/store";
-import {addNode} from "../../../../StateMangement/flowSlice";
+import {addNode} from "../../../../StateMangement/Slices/flowSlice";
 
 // Define the props for the component
 interface NodeSelectionComponentProps {

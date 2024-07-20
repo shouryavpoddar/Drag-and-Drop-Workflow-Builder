@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, Panel } from 'reactflow';
 import { useDispatch, useSelector } from 'react-redux';
-import { onConnect, onEdgesChange, onNodesChange } from '../../../StateMangement/flowSlice';
+import { onConnect, onEdgesChange, onNodesChange } from '../../../StateMangement/Slices/flowSlice';
 import { RootState } from '../../../StateMangement/store';
 import AddBlockModal from './AddBlockModal';
 import InputNode from '../../../Components/CustomInputNode';

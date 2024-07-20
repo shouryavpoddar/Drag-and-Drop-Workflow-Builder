@@ -1,11 +1,11 @@
 import React, {useCallback, useState} from "react";
 import { Handle, NodeProps, Position } from "reactflow";
-import {deleteNode} from "../StateMangement/flowSlice";
+import {deleteNode} from "../StateMangement/Slices/flowSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../StateMangement/store";
 import {CsvData, CustomData} from "../App";
 import Papa from "papaparse";
-import {setNodeData} from "../StateMangement/nodesDataSlice";
+import {setNodeData} from "../StateMangement/Slices/nodesDataSlice";
 
 export default function CustomInputNode({ id }: NodeProps<CustomData>) {
     const dispatch: AppDispatch = useDispatch();

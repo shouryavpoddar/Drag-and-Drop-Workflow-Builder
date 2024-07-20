@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { addEdge, applyEdgeChanges, applyNodeChanges, Edge, Node, NodeChange, EdgeChange, Connection } from 'reactflow';
-import { CsvData } from '../App'; // Adjust the path if necessary
+import { CsvData } from '../../App'; // Adjust the path if necessary
 
 
 interface FlowState {

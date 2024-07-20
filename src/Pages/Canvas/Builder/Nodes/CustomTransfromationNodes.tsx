@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Handle, NodeProps, Position,} from 'reactflow';
 import {useDispatch,} from 'react-redux';
-import {deleteNode} from "../../../../StateMangement/flowSlice";
-import {setNodeData} from "../../../../StateMangement/nodesDataSlice";
+import {deleteNode} from "../../../../StateMangement/Slices/flowSlice";
+import {setNodeData} from "../../../../StateMangement/Slices/nodesDataSlice";
 import useParentData from "../../../../utils/UseParentData";
 import {CsvData, CsvRow, CustomData} from "../../../../App";
 import {AppDispatch} from "../../../../StateMangement/store";
@@ -379,7 +379,6 @@ export const SortNode = ({ id }: NodeProps<CustomData>) => {
     );
 };
 
-// Helper function to perform inner join
 const innerJoin = (data1: CsvData, data2: CsvData, keys1: string[], keys2: string[]): CsvData => {
   if (!data1 || !data2 || !keys1.length || !keys2.length) return [];
 
@@ -520,7 +519,6 @@ export const MergeNode = ({ id }: NodeProps<CustomData>) => {
   );
 };
 
-// Helper function to remove specific columns from the dataset
 const removeColumnsFromDataset = (data: CsvData, columns: string[]): CsvData => {
   if (!data || !columns.length) return [];
 
@@ -533,7 +531,6 @@ const removeColumnsFromDataset = (data: CsvData, columns: string[]): CsvData => 
   });
 };
 
-// Helper function to keep specific columns in the dataset
 const keepColumnsInDataset = (data: CsvData, columns: string[]): CsvData => {
   if (!data || !columns.length) return [];
 
