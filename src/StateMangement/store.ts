@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import flowReducer from './flowSlice';
 import modalReducer from './modalSlice';
 import outputReducer from './outputSlice';
+import nodesDataReducer from './nodesDataSlice';
 
 
 export const store = configureStore({
     reducer: {
+        nodesData: nodesDataReducer,
         flow: flowReducer,
         modal: modalReducer,
         output: outputReducer,

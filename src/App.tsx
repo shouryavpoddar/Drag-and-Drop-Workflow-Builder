@@ -1,5 +1,5 @@
 import './App.css'
-import Canvas from "./Pages/Canvas";
+import Canvas from "./Pages/Canvas/Canvas";
 import {Provider} from "react-redux";
 import {store} from "./StateMangement/store";
 import React from 'react';

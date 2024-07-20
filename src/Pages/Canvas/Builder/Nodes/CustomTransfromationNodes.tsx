@@ -1,17 +1,15 @@
-
 import React, {useEffect, useState} from 'react';
 import {Handle, NodeProps, Position,} from 'reactflow';
 import {useDispatch,} from 'react-redux';
-import {deleteNode, setNodeData} from "../StateMangement/flowSlice";
-import useParentData from "../utils/UseParentData";
-// @ts-ignore
-import {CsvData, CsvRow, CustomData} from "../App";
-import {AppDispatch} from "../StateMangement/store";
-
+import {deleteNode} from "../../../../StateMangement/flowSlice";
+import {setNodeData} from "../../../../StateMangement/nodesDataSlice";
+import useParentData from "../../../../utils/UseParentData";
+import {CsvData, CsvRow, CustomData} from "../../../../App";
+import {AppDispatch} from "../../../../StateMangement/store";
 
 export const FilterNode = ({ id }: NodeProps<CustomData>) => {
     const dispatch: AppDispatch = useDispatch();
-    const [parentData]: CsvData[] | null[]= useParentData(id);
+    const [parentData]= useParentData(id);
     const [selectedColumn, setSelectedColumn] = useState('Select Column');
     const [selectedValue, setSelectedValue] = useState('');
     const [selectedCondition, setSelectedCondition] = useState('Select condition');
@@ -154,10 +152,9 @@ export const FilterNode = ({ id }: NodeProps<CustomData>) => {
     );
 };
 
-
 export const SliceNode = ({ id }: NodeProps<CustomData>) => {
     const dispatch: AppDispatch = useDispatch();
-    const [parentData]: CsvData[] | null[]= useParentData(id);
+    const [parentData] = useParentData(id);
     const [fromIndex, setFromIndex] = useState(0);
     const [toIndex, setToIndex] = useState( 0);
 
@@ -260,10 +257,9 @@ export const SliceNode = ({ id }: NodeProps<CustomData>) => {
     );
 };
 
-
 export const SortNode = ({ id }: NodeProps<CustomData>) => {
     const dispatch: AppDispatch = useDispatch();
-    const [parentData]: CsvData[] | null[]= useParentData(id);
+    const [parentData] = useParentData(id);
     const [selectedColumn, setSelectedColumn] = useState('Select Column');
     const [selectedCondition, setSelectedCondition] = useState('Select condition');
 
@@ -301,6 +297,7 @@ export const SortNode = ({ id }: NodeProps<CustomData>) => {
             return 0;
         });
 
+        console.log('Sorted Data:', sorted);
 
         dispatch(setNodeData({ id, data: sorted }));
     };
@@ -382,100 +379,145 @@ export const SortNode = ({ id }: NodeProps<CustomData>) => {
     );
 };
 
+// Helper function to perform inner join
+const innerJoin = (data1: CsvData, data2: CsvData, keys1: string[], keys2: string[]): CsvData => {
+  if (!data1 || !data2 || !keys1.length || !keys2.length) return [];
 
-// Hook to fetch parent data
+  const joinedData: CsvData = [];
+
+  data1.forEach(row1 => {
+    data2.forEach(row2 => {
+      let isMatch = true;
+      for (let i = 0; i < keys1.length; i++) {
+        if (row1[keys1[i]] !== row2[keys2[i]]) {
+          isMatch = false;
+          break;
+        }
+      }
+      if (isMatch) {
+        joinedData.push({ ...row1, ...row2 });
+      }
+    });
+  });
+
+  console.log('Joined Data:', joinedData)
+  return joinedData;
+};
 
 export const MergeNode = ({ id }: NodeProps<CustomData>) => {
-    const dispatch: AppDispatch = useDispatch();
-    const [parentData1, parentData2] = useParentData(id);
-    const [selectedColumn1, setSelectedColumn1] = useState('Select Column');
-    const [selectedColumn2, setSelectedColumn2] = useState('Select Column');
+  const dispatch: AppDispatch = useDispatch();
+  const [parentData1, parentData2] = useParentData(id) as [CsvData | null, CsvData | null];
+  const [joinKeys1, setJoinKeys1] = useState<string[]>(['']);
+  const [joinKeys2, setJoinKeys2] = useState<string[]>(['']);
 
-    const mergeDatasets = (data1: CsvData, data2: CsvData) => {
-        if (!data1 || !data2) return [];
+  const handleKeyChange1 = (index: number, value: string) => {
+    const newJoinKeys = [...joinKeys1];
+    newJoinKeys[index] = value;
+    setJoinKeys1(newJoinKeys);
+  };
 
-        const mergedData = data1.map(row1 => {
-            const row2 = data2.find(row2 => row2[selectedColumn2] === row1[selectedColumn1]);
-            console.log(row2)
-            return row2 ? { ...row1, ...row2 } : row1;
-        });
-        console.log('Merged Data:', mergedData)
-        dispatch(setNodeData({ id, data: mergedData }));
+  const handleKeyChange2 = (index: number, value: string) => {
+    const newJoinKeys = [...joinKeys2];
+    newJoinKeys[index] = value;
+    setJoinKeys2(newJoinKeys);
+  };
+
+  const addJoinKey = () => {
+    setJoinKeys1([...joinKeys1, '']);
+    setJoinKeys2([...joinKeys2, '']);
+  };
+
+  const applyJoin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!parentData1 || !parentData2 || joinKeys1.includes('') || joinKeys2.includes('')) {
+      console.log('Please select all keys and ensure both datasets are connected');
+      return;
     }
 
-    const handleColumn1Change = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedColumn1(event.target.value);
-    };
+    const result = innerJoin(parentData1, parentData2, joinKeys1, joinKeys2);
+    dispatch(setNodeData({ id, data: result }));
+  };
 
-    const handleColumn2Change = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedColumn2(event.target.value);
-    };
-
-    return (
-        <>
-            {!parentData1 || !parentData2 ? (
-                <div className="bg-gray-900 border border-gray-700 rounded-md p-4 w-64">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="font-semibold text-white">Merge</h3>
-                        <button onClick={() => dispatch(deleteNode(id))} className="text-gray-400 hover:text-gray-300">
-                            &times;
-                        </button>
-                    </div>
-                    <div className="flex flex-col mb-4">
-                        <label className="text-gray-400 mb-2">Column name:</label>
-                        <select className="bg-gray-800 text-white rounded-md p-2">
-                            <option value="">← connect dataset...</option>
-                        </select>
-                    </div>
-                    <Handle type="target" position={Position.Left} id="a" style={{ top: '30%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
-                    <Handle type="target" position={Position.Left} id="b" style={{ top: '70%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
-                </div>
-            ) : (
-                <div className="bg-gray-900 border border-gray-700 rounded-md p-4 w-64">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="font-semibold text-white">Merge</h3>
-                        <button onClick={() => dispatch(deleteNode(id))} className="text-gray-400 hover:text-gray-300">
-                            &times;
-                        </button>
-                    </div>
-                    <div className="flex flex-col mb-4">
-                        <label className="text-gray-400 mb-2">Column from Dataset 1:</label>
-                        <select
-                            className="bg-gray-800 text-white rounded-md p-2"
-                            value={selectedColumn1}
-                            onChange={handleColumn1Change}
-                        >
-                            {Object.keys(parentData1[0]).map(column => (
-                                <option key={column} value={column}>
-                                    {column}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="flex flex-col mb-4">
-                        <label className="text-gray-400 mb-2">Column from Dataset 2:</label>
-                        <select
-                            className="bg-gray-800 text-white rounded-md p-2"
-                            value={selectedColumn2}
-                            onChange={handleColumn2Change}
-                        >
-                            {Object.keys(parentData2[0]).map(column => (
-                                <option key={column} value={column}>
-                                    {column}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <button
-                        onClick={() => mergeDatasets(parentData1, parentData2)}
-                        className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600">Run</button>
-                    <Handle type="target" position={Position.Left} id="a" style={{ top: '30%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
-                    <Handle type="target" position={Position.Left} id="b" style={{ top: '70%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
-                    <Handle type="source" position={Position.Right} className="w-2 h-2 bg-gray-500 rounded-full" />
-                </div>
-            )}
-        </>
-    );
+  return (
+    <>
+      {!parentData1 || !parentData2 ? (
+        <div className="bg-gray-900 border border-gray-700 rounded-md p-4 w-64">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold text-white">Merge</h3>
+            <button onClick={() => dispatch(deleteNode(id))} className="text-gray-400 hover:text-gray-300">
+              &times;
+            </button>
+          </div>
+          <div className="flex flex-col mb-4">
+            <label className="text-gray-400 mb-2">Column name:</label>
+            <select className="bg-gray-800 text-white rounded-md p-2">
+              <option value="">← connect dataset...</option>
+            </select>
+          </div>
+          <Handle type="target" position={Position.Left} id="a" style={{ top: '30%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
+          <Handle type="target" position={Position.Left} id="b" style={{ top: '70%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
+        </div>
+      ) : (
+        <div className="bg-gray-900 border border-gray-700 rounded-md p-4 w-64">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold text-white">Merge</h3>
+            <button onClick={() => dispatch(deleteNode(id))} className="text-gray-400 hover:text-gray-300">
+              &times;
+            </button>
+          </div>
+          <form onSubmit={applyJoin}>
+            {joinKeys1.map((key, index) => (
+              <div className="flex flex-col mb-4" key={index}>
+                <label className="text-gray-400 mb-2">Join Key from Dataset 1:</label>
+                <select
+                  className="bg-gray-800 text-white rounded-md p-2"
+                  value={key}
+                  onChange={(e) => handleKeyChange1(index, e.target.value)}
+                >
+                  <option value="">Select Key</option>
+                  {Object.keys(parentData1[0] || {}).map(column => (
+                    <option key={column} value={column}>
+                      {column}
+                    </option>
+                  ))}
+                </select>
+                <label className="text-gray-400 mb-2">Join Key from Dataset 2:</label>
+                <select
+                  className="bg-gray-800 text-white rounded-md p-2"
+                  value={joinKeys2[index]}
+                  onChange={(e) => handleKeyChange2(index, e.target.value)}
+                >
+                  <option value="">Select Key</option>
+                  {Object.keys(parentData2[0] || {}).map(column => (
+                    <option key={column} value={column}>
+                      {column}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 mb-4"
+              onClick={addJoinKey}
+            >
+              + Add Key
+            </button>
+            <button
+              type="submit"
+              className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+            >
+              Apply Join
+            </button>
+            <Handle type="source" position={Position.Right} className="w-2 h-2 bg-gray-500 rounded-full" />
+          </form>
+        </div>
+      )}
+      <Handle type="target" position={Position.Left} id="a" style={{ top: '30%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
+      <Handle type="target" position={Position.Left} id="b" style={{ top: '70%' }} className="w-2 h-2 bg-gray-500 rounded-full" />
+    </>
+  );
 };
 
 // Helper function to remove specific columns from the dataset
@@ -885,6 +927,93 @@ export const MutateNode = ({ id }: NodeProps<CustomData>) => {
                         className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                     >
                         Apply
+                    </button>
+                    <Handle type="source" position={Position.Right} className="w-2 h-2 bg-gray-500 rounded-full" />
+                </form>
+            ) : (
+                <div className="text-gray-500">Please connect dataset...</div>
+            )}
+            <Handle type="target" position={Position.Left} className="w-2 h-2 bg-gray-500 rounded-full" />
+        </div>
+    );
+};
+
+const renameColumn = (data: CsvData, oldColumnName: string, newColumnName: string): CsvData => {
+    if (!data || !oldColumnName || !newColumnName) return data;
+
+    return data.map(row => {
+        const newRow = { ...row };
+        newRow[newColumnName] = newRow[oldColumnName];
+        delete newRow[oldColumnName];
+        return newRow;
+    });
+};
+
+export const RenameNode = ({ id }: NodeProps<CustomData>) => {
+    const dispatch: AppDispatch = useDispatch();
+    const [parentData] = useParentData(id) as [CsvData | null];
+    const [oldColumnName, setOldColumnName] = useState<string>('');
+    const [newColumnName, setNewColumnName] = useState<string>('');
+
+    const handleOldColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setOldColumnName(event.target.value);
+    };
+
+    const handleNewColumnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewColumnName(event.target.value);
+    };
+
+    const applyRename = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if (!parentData || !oldColumnName || !newColumnName) {
+            console.log('Please select a column and set a new name');
+            return;
+        }
+
+        const result = renameColumn(parentData, oldColumnName, newColumnName);
+        dispatch(setNodeData({ id, data: result }));
+    };
+
+    return (
+        <div className="bg-gray-900 border border-gray-700 rounded-md p-4 w-64 text-gray-200">
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="font-semibold">Rename Column</h3>
+                <button onClick={() => dispatch(deleteNode(id))} className="text-gray-400 hover:text-gray-300">
+                    &times;
+                </button>
+            </div>
+            {parentData ? (
+                <form onSubmit={applyRename}>
+                    <div className="flex flex-col mb-4">
+                        <label className="text-gray-400 mb-2">Old Column Name:</label>
+                        <select
+                            className="bg-gray-800 text-white rounded-md p-2"
+                            value={oldColumnName}
+                            onChange={handleOldColumnChange}
+                        >
+                            <option value="">Select Column</option>
+                            {Object.keys(parentData[0] || {}).map(column => (
+                                <option key={column} value={column}>
+                                    {column}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex flex-col mb-4">
+                        <label className="text-gray-400 mb-2">New Column Name:</label>
+                        <input
+                            type="text"
+                            className="bg-gray-800 text-white rounded-md p-2"
+                            value={newColumnName}
+                            onChange={handleNewColumnChange}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+                    >
+                        Apply Rename
                     </button>
                     <Handle type="source" position={Position.Right} className="w-2 h-2 bg-gray-500 rounded-full" />
                 </form>

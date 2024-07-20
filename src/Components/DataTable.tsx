@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, {useMemo, useRef} from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useSelector } from 'react-redux';
 import { RootState } from '../StateMangement/store';
@@ -61,7 +61,7 @@ const DataTable: React.FC = () => {
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
-                                        width: `${virtualColumn.size}px`,
+                                        width: `${virtualColumn.size }px`,
                                         height: `${virtualRow.size}px`,
                                         transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
                                     }}
@@ -78,5 +78,6 @@ const DataTable: React.FC = () => {
         </div>
     );
 }
+
 
 export default DataTable;

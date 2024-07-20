@@ -19,105 +19,29 @@ const flowSlice = createSlice({
     name: 'flow',
     initialState,
     reducers: {
-        addInputNode(state) {
-            state.nodes = [
-                ...state.nodes,
-                {
-                    id: `${Date.now()}`,
-                    position: { x: 100, y: 200 },
-                    type: 'inputNode',
-                } as Node,
-            ];
-        },
-        addFilterNode(state) {
+        addNode(state, action) {
             state.nodes = [
                 ...state.nodes,
                 {
                     id: `${Date.now()}`,
                     data: undefined,
                     position: { x: 100, y: 200 },
-                    type: 'filterNode',
-                } as Node,
-            ];
-        },
-        addMergeNode(state) {
-            state.nodes = [
-                ...state.nodes,
-                {
-                    id: `${Date.now()}`,
-                    data: undefined,
-                    position: { x: 100, y: 200 },
-                    type: 'mergeNode',
-                } as Node,
-            ];
-        },
-        addSortNode(state) {
-            state.nodes = [
-                ...state.nodes,
-                {
-                    id: `${Date.now()}`,
-                    data: undefined,
-                    position: { x: 100, y: 200 },
-                    type: 'sortNode',
-                } as Node,
-            ];
-        },
-        addSliceNode(state) {
-            state.nodes = [
-                ...state.nodes,
-                {
-                    id: `${Date.now()}`,
-                    data: undefined,
-                    position: { x: 100, y: 200 },
-                    type: 'sliceNode',
-                } as Node,
-            ];
-        },
-        addPivotNode(state){
-            state.nodes = [
-                ...state.nodes,
-                {
-                    id: `${Date.now()}`,
-                    data: undefined,
-                    position: { x: 100, y: 200 },
-                    type: 'pivotNode',
-                } as Node,
-            ];
-        },
-        addMutateNode(state){
-            state.nodes = [
-                ...state.nodes,
-                {
-                    id: `${Date.now()}`,
-                    data: undefined,
-                    position: { x: 100, y: 200 },
-                    type: 'mutateNode',
-                } as Node,
-            ];
-        },
-        addRemoveColumnsNode(state) {
-            state.nodes = [
-                ...state.nodes,
-                {
-                    id: `${Date.now()}`,
-                    data: undefined,
-                    position: { x: 100, y: 200 },
-                    type: 'removeColumnsNode',
+                    type: action.payload,
                 } as Node,
             ];
         },
         onNodesChange(state, action: PayloadAction<NodeChange[]>) {
             state.nodes = applyNodeChanges(action.payload, state.nodes);
         },
-        setNodeData(state, action: PayloadAction<{ id: string; data: CsvData }>) {
-            const { id, data } = action.payload;
-            state.nodes = state.nodes.map((node) => {
-                if (node.id === id) {
-                    return { ...node, data };
-                }
-                return node;
-            });
-        },
+        // setNodeData(state, action: PayloadAction<{ id: string; data: CsvData }>) {
+        //     const { id, data } = action.payload;
+        //     state.nodes = state.nodes.map((node) => {
+        //         if (node.id === id) {
+        //             return { ...node, data };
+        //         }
+        //         return node;
+        //     });
+        // },
         onEdgesChange(state, action: PayloadAction<EdgeChange[]>) {
             state.edges = applyEdgeChanges(action.payload, state.edges);
         },
@@ -134,19 +58,11 @@ const flowSlice = createSlice({
 
 
 export const {
-    addSortNode,
-    setNodeData,
-    addInputNode,
-    addFilterNode,
     onNodesChange,
     onEdgesChange,
     onConnect,
-    addSliceNode,
-    addMergeNode,
     deleteNode,
-    addRemoveColumnsNode,
-    addPivotNode,
-    addMutateNode,
+    addNode,
 } = flowSlice.actions;
 
 
