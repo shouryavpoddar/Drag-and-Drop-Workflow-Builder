@@ -1,8 +1,5 @@
 import React from 'react';
-import DataTable from "../../../Components/DataTable";
-import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
-import { outputPanelClose, outputPanelOpen } from "../../../StateMangement/Slices/outputSlice";
 import { AppDispatch, RootState } from "../../../StateMangement/store";
 import {CsvData} from "../../../App";
 import Table from "../../../Components/Table/Table"
@@ -13,9 +10,6 @@ const BottomSection= ({height}: {height: number}) => {
     const isOutputVisible = useSelector((state: RootState) => state.output.show);
     const data: CsvData | null = useSelector((state: RootState) => state.output.data);
 
-    const toggleOutputVisibility = () => {
-        dispatch(isOutputVisible ? outputPanelClose() : outputPanelOpen());
-    };
 
     const exportToJSON = () => {
         const json = JSON.stringify(data, null, 2);

@@ -2,18 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { addEdge, applyEdgeChanges, applyNodeChanges, Edge, Node, NodeChange, EdgeChange, Connection } from 'reactflow';
 import { CsvData } from '../../App'; // Adjust the path if necessary
 
-
 interface FlowState {
     nodes: Node[];
     edges: Edge[];
 }
 
-
 const initialState: FlowState = {
     nodes: [],
     edges: [],
 };
-
 
 const flowSlice = createSlice({
     name: 'flow',
@@ -33,15 +30,6 @@ const flowSlice = createSlice({
         onNodesChange(state, action: PayloadAction<NodeChange[]>) {
             state.nodes = applyNodeChanges(action.payload, state.nodes);
         },
-        // setNodeData(state, action: PayloadAction<{ id: string; data: CsvData }>) {
-        //     const { id, data } = action.payload;
-        //     state.nodes = state.nodes.map((node) => {
-        //         if (node.id === id) {
-        //             return { ...node, data };
-        //         }
-        //         return node;
-        //     });
-        // },
         onEdgesChange(state, action: PayloadAction<EdgeChange[]>) {
             state.edges = applyEdgeChanges(action.payload, state.edges);
         },
@@ -53,9 +41,32 @@ const flowSlice = createSlice({
             state.nodes = state.nodes.filter((node) => node.id !== nodeId);
             state.edges = state.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId);
         },
+        saveState(state) {
+            const stateString = JSON.stringify(state);
+            localStorage.setItem('flowState', stateString);
+        },
+        setNodeState(state, action: PayloadAction<{
+            id: string,
+            data:{[key: string]: string | string[] | number}}>
+        ) {
+            const { id, data } = action.payload;
+            state.nodes = state.nodes.map((node) => {
+                if (node.id === id) {
+                    return { ...node, data };
+                }
+                return node;
+            });
+        },
+        loadState(state) {
+            const stateString = localStorage.getItem('flowState');
+            if (stateString) {
+                const loadedState = JSON.parse(stateString);
+                state.nodes = loadedState.nodes;
+                state.edges = loadedState.edges;
+            }
+        },
     },
 });
-
 
 export const {
     onNodesChange,
@@ -63,7 +74,9 @@ export const {
     onConnect,
     deleteNode,
     addNode,
+    saveState,
+    loadState,
+    setNodeState,
 } = flowSlice.actions;
-
 
 export default flowSlice.reducer;

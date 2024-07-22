@@ -1,7 +1,8 @@
 // nodesDataSlice.ts
 import { CsvData } from "../../App";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from '../store'; // Adjust the import path according to your project structure
+import { RootState } from '../store';
+import {loadState, saveState} from "./flowSlice"; // Adjust the import path according to your project structure
 
 interface NodesDataState {
     dataBase: { [key: string]: CsvData }; // Corrected type definition for dataBase
@@ -20,6 +21,18 @@ const nodesDataSlice = createSlice({
             state.dataBase[id] = data;
         }
     },
+    extraReducers: (builder) => {
+        builder.addCase(saveState, (state, action) => {
+            const dataBase = JSON.stringify(state);
+            localStorage.setItem('dataBase', dataBase);
+        });
+        builder.addCase(loadState, (state) => {
+            const dataBase: any = localStorage.getItem('dataBase');
+            if (dataBase) {
+                state.dataBase = JSON.parse(dataBase).dataBase;
+            }
+        });
+    }
 });
 
 export const { setNodeData } = nodesDataSlice.actions;

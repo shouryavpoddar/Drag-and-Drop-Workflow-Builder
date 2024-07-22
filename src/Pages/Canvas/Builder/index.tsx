@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { onConnect, onEdgesChange, onNodesChange } from '../../../StateMangement/Slices/flowSlice';
 import { RootState } from '../../../StateMangement/store';
 import AddBlockModal from './AddBlockModal';
-import InputNode from '../../../Components/CustomInputNode';
+import InputNode from './Nodes/CustomInputNode';
 import {
     FilterNode,
     MergeNode, MutateNode,
     PivotNode,
-    RemoveColumnsNode, RenameNode,
+    SelectColumnsNode, RenameColumnNode,
     SliceNode,
     SortNode
-} from './Nodes/CustomTransfromationNodes';
+} from './Nodes/TransfromationNodes';
 
 const nodeTypes = {
     inputNode: InputNode,
@@ -21,10 +21,10 @@ const nodeTypes = {
     sortNode: SortNode,
     sliceNode: SliceNode,
     mergeNode: MergeNode,
-    removeColumnsNode: RemoveColumnsNode,
+    removeColumnsNode: SelectColumnsNode,
     pivotNode: PivotNode,
     mutateNode: MutateNode,
-    renameColumnsNode: RenameNode,
+    renameColumnsNode: RenameColumnNode,
 };
 
 const Builder: React.FC<{ handleMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void; height: number }> = ({ handleMouseDown, height }) => {

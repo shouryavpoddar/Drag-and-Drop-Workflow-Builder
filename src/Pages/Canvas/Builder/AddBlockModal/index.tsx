@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from 'react-modal';
 import Sidebar from "../../../../Components/Sidebar";
-import NodeSelectionComponent from "./NodeSelectionComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { modalClose, modalOpen } from "../../../../StateMangement/Slices/modalSlice";
 import {AppDispatch, RootState} from "../../../../StateMangement/store";
@@ -10,7 +9,7 @@ import InputNodesSelection from "./InputNodesSelection";
 
 Modal.setAppElement("#root");
 
-const Index = () => {
+const AddBlockModal = () => {
     const dispatch: AppDispatch  = useDispatch();
     const modalIsOpen = useSelector((state: RootState) => state.modal.open);
 
@@ -70,4 +69,4 @@ const Index = () => {
 );
 }
 
-export default Index;
+export default AddBlockModal;
