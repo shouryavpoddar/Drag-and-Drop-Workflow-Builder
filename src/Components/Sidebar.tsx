@@ -5,8 +5,6 @@ import React, {
     useEffect,
     useState,
     ReactNode,
-    ReactElement,
-    JSXElementConstructor
 } from "react";
 
 interface SidebarContextType {

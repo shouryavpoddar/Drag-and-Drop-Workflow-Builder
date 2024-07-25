@@ -1,18 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setNodeData } from './flowSlice';
-import {CsvData} from "../App";
+
+import {CsvData} from "../../App";
+import {setNodeData} from "./nodesDataSlice";
 
 
 
 interface OutputState {
     show: boolean;
-    data: CsvData | null;
+    data: CsvData;
 }
 
 
 const initialState: OutputState = {
     show: false,
-    data: null,
+    data: [],
 };
 
 

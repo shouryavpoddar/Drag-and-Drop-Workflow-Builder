@@ -1,10 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addInputNode } from "../StateMangement/flowSlice";
-import Papa from "papaparse";
-import { modalClose } from "../StateMangement/modalSlice";
-import {AppDispatch} from "../StateMangement/store";
-import {Action, UnknownAction} from "@reduxjs/toolkit";
+import { modalClose } from "../../../../StateMangement/Slices/modalSlice";
+import {AppDispatch} from "../../../../StateMangement/store";
+import {addNode} from "../../../../StateMangement/Slices/flowSlice";
 
 // Define the props for the component
 interface NodeSelectionComponentProps {
@@ -12,7 +10,7 @@ interface NodeSelectionComponentProps {
     description: string;
     input?: string;
     output: string;
-    addNodeFunction: () => Action | UnknownAction;
+    type: string
 }
 
 const NodeSelectionComponent: React.FC<NodeSelectionComponentProps>
@@ -20,11 +18,11 @@ const NodeSelectionComponent: React.FC<NodeSelectionComponentProps>
        description,
        input,
        output,
-       addNodeFunction,}) => {
+       type}) => {
     const dispatch: AppDispatch = useDispatch();
 
     const onClick = () => {
-        dispatch(addNodeFunction());
+        dispatch(addNode(type));
         dispatch(modalClose())
     };
 
