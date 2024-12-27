@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+Based on the information available, here’s a draft for your project’s README file:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Drag-and-Drop Workflow Builder
 
-## Available Scripts
+An intuitive web application that enables users to design workflows through a drag-and-drop interface. This tool allows for the visual creation of workflows by adding nodes, connecting them, and configuring their properties.
 
-In the project directory, you can run:
+Features
+	•	Drag-and-Drop Interface: Easily create workflows by dragging and connecting nodes.
+	•	Node Customization: Configure each node’s properties to fit your workflow requirements.
+	•	Workflow Visualization: Visual representation of workflows for better understanding and management.
+	•	Data Export: Save and export workflows in JSON or CSV formats for future use.
 
-### `npm start`
+Prerequisites
+	•	Node.js: Ensure you have Node.js (v20 or higher) installed.
+	•	pnpm: This project uses the pnpm package manager.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Getting Started
+	1.	Install pnpm: If you haven’t installed pnpm, you can do so by running:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+npm install -g pnpm
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+	2.	Clone the Repository:
 
-### `npm run build`
+git clone https://github.com/shouryavpoddar/Drag-and-Drop-Workflow-Builder.git
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+	3.	Navigate to the Project Directory:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+cd Drag-and-Drop-Workflow-Builder
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+	4.	Install Dependencies:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+pnpm install
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+	5.	Run the Application in Development Mode:
 
-## Learn More
+pnpm run dev
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The application will be available at http://localhost:3000.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Building for Production
 
-### Code Splitting
+To build the application for production, run:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+pnpm run build
 
-### Analyzing the Bundle Size
+This will compile the app into the dist folder, optimized for production use.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Deployment with Docker
+	1.	Build the Docker Image:
 
-### Making a Progressive Web App
+docker build -t workflow-builder .
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+	2.	Run the Docker Container:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+docker run -p 3000:3000 workflow-builder
 
-### Deployment
+The application will be accessible at http://localhost:3000.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Contributing
 
-### `npm run build` fails to minify
+Contributions are welcome! Please fork the repository, create a new branch for your feature or bug fix, make your changes, and submit a pull request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+License
+
+This project is licensed under the MIT License. See the LICENSE file for more information.
