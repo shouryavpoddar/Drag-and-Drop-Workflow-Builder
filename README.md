@@ -1,5 +1,3 @@
-Here’s the updated README file that incorporates the context about using workflows for data science in a code-free environment:
-
 # Drag-and-Drop Workflow Builder 🚀
 
 Welcome to the **Drag-and-Drop Workflow Builder**, an innovative web application that brings data science to your fingertips – no coding required! Imagine the power of visually designing data workflows, connecting nodes to handle complex data tasks, and achieving insights with ease. Whether you're a seasoned data scientist or someone curious about data analysis, this tool simplifies the process and empowers everyone to dive into data.
